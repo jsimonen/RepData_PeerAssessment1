@@ -25,7 +25,8 @@ The activity monitoring data is provided as a zipped CSV file, so we first unzip
 it and then read it into a table. For the analysis, we also need to convert the date 
 strings into date format. The following code takes care of all of that.
 
-```{r loadandprocess}
+
+```r
 unzip("activity.zip")
 activity <- read.csv("activity.csv",stringsAsFactors=FALSE)
 activity$date <- as.Date(activity$date, "%Y-%m-%d")
@@ -35,26 +36,31 @@ activity$date <- as.Date(activity$date, "%Y-%m-%d")
 
 Let's calculate the number of steps taken per day. We ignore the missing values.
 
-```{r stepsperday}
+
+```r
 library(plyr) 
 stepsperday <- ddply(activity, .(date),summarize,steps = sum(steps, na.rm=TRUE))
 meansteps <- mean(stepsperday$steps)
 mediansteps <- median(stepsperday$steps)
 ```
 
-The mean steps per day is `r round(meansteps)` and median `r round(mediansteps)`. 
+The mean steps per day is 9354 and median 1.0395 &times; 10<sup>4</sup>. 
 Let's plot a histogram.
 
-```{r stepsogram,fig.height=4}
+
+```r
 hist(stepsperday$steps,breaks=20,xlab="Steps per day",main="Histogram of steps per day")
 ```
+
+![plot of chunk stepsogram](figure/stepsogram.png) 
 
 ## What is the average daily activity pattern?
 
 Let us study the daily activity pattern by averaging the number of steps for each 5 minute interval
 across all day in the dataset.
 
-```{r dailyactivity}
+
+```r
 library(plyr) 
 stepsperint <- ddply(activity, .(interval),summarize,averageSteps = mean(steps, na.rm=TRUE))
 maxavesteps <- max(stepsperint$averageSteps)
@@ -62,14 +68,17 @@ maxavestepsIndex <- which.max(stepsperint$averageSteps)
 maxinterval <- activity$interval[maxavestepsIndex]
 ```
 
-The maximum number of steps, on average, is `r round(maxavesteps)` 
-which happens in time interval `r round(maxinterval)`. This can be seen from the following
+The maximum number of steps, on average, is 206 
+which happens in time interval 835. This can be seen from the following
 time series plot
 
-```{r dailyactivityplot,fig.height=4}
+
+```r
 with(stepsperint,plot(interval,averageSteps,type="l",xlab="Interval",
                       ylab="Average steps",main="Average daily activity"))
 ```
+
+![plot of chunk dailyactivityplot](figure/dailyactivityplot.png) 
 
 
 ## Imputing missing values
