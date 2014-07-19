@@ -137,4 +137,50 @@ hist(stepsperday.NArep$steps,breaks=20,xlab="Steps per day",main="Histogram of s
 
 ![plot of chunk stepsogram.NArep](figure/stepsogram.NArep.png) 
 
+Comparing this with the histogram for the original data presented above, we see that the difference comes from the large number of days with no reported steps in the original data. Replacing the NAs with the mean number of steps for the given interval has therefore increased both the mean and median number of steps.
+
 ## Are there differences in activity patterns between weekdays and weekends?
+
+It is instructive to compare the activity patterns between weekdays and weekends. First, let's 
+make a factor variable that tells which category a given date in the data belongs to.
+
+
+```r
+# make sure we are using an english locale, or else the names of days will be different
+Sys.setlocale("LC_TIME", "English")
+```
+
+```
+## [1] "English_United States.1252"
+```
+
+```r
+# initialize the variable for holding the type of the day with 'weekday'
+daytype <- rep('weekday',nrow(activity))
+# replace the day type of Saturdays and Sundays to 'weekend' 
+daytype[weekdays(activity$date) %in% c('Saturday','Sunday')] <- 'weekend'
+activity.NArep <- cbind(activity.NArep,daytype)
+activity.NArep$daytype <- as.factor(activity.NArep$daytype)
+```
+
+Then let's calculate the average number of steps for each interval for weekdays and weekends.
+
+
+```r
+activity.NArep2 <- ddply(activity.NArep, .(interval, daytype),summarize,meansteps = mean(steps))
+```
+
+Finally, let's plot two time series figures to compare the data.
+
+
+```r
+library("lattice")
+xyplot(meansteps ~ interval | daytype, data = activity.NArep2, type = "l")
+```
+
+![plot of chunk weekdaysplot](figure/weekdaysplot.png) 
+
+We can see significant differences in the recorded average activity for weekdays and weekends, but a more
+detailed analysis is not a part of this project.
+
+

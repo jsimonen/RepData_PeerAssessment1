@@ -139,3 +139,21 @@ daytype[weekdays(activity$date) %in% c('Saturday','Sunday')] <- 'weekend'
 activity.NArep <- cbind(activity.NArep,daytype)
 activity.NArep$daytype <- as.factor(activity.NArep$daytype)
 ```
+
+Then let's calculate the average number of steps for each interval for weekdays and weekends.
+
+```{r weekdayscalc}
+activity.NArep2 <- ddply(activity.NArep, .(interval, daytype),summarize,meansteps = mean(steps))
+```
+
+Finally, let's plot two time series figures to compare the data.
+
+```{r weekdaysplot}
+library("lattice")
+xyplot(meansteps ~ interval | daytype, data = activity.NArep2, type = "l")
+```
+
+We can see significant differences in the recorded average activity for weekdays and weekends, but a more
+detailed analysis is not a part of this project.
+
+
