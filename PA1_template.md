@@ -3,6 +3,12 @@ output:
   html_document:
     keep_md: yes
 ---
+
+
+```r
+options(scipen=5) # for setting the threshold of displaying number with scientific notation
+```
+
 # Reproducible Research: Peer Assessment 1
 Janne Simonen  
 
@@ -44,7 +50,7 @@ meansteps <- mean(stepsperday$steps)
 mediansteps <- median(stepsperday$steps)
 ```
 
-The mean steps per day is 9354 and median 1.0395 &times; 10<sup>4</sup>. 
+The mean steps per day is 9354 and median 10395. 
 Let's plot a histogram.
 
 
@@ -93,7 +99,7 @@ Let's calculate the total number of missing values in the dataset (i.e. the tota
 missingValues <- nrow(activity) - sum(complete.cases(activity))
 ```
 
-Of the {r nrow(activity)} rows of data thera are **{r missingValues} rows with missing data**.  
+Of the 17568 rows of data thera are **2304 rows with missing data**.  
 
 To make the analysis a bit more accurate, we have to replace the missing values with a sensible value.
 Let's use the mean number of steps for a given time interval as a replacement for all NAs recorder for that day.
@@ -125,8 +131,8 @@ mediansteps.NArep <- median(stepsperday.NArep$steps)
 ```
 
 The mean steps per day for the data with NAs replace (values for original data in parenthesis) is 
-1.0766 &times; 10<sup>4</sup> (9354) and median 
-1.0762 &times; 10<sup>4</sup> (1.0395 &times; 10<sup>4</sup>).  
+10766 (9354) and median 
+10762 (10395).  
 
 Let's plot a histogram.
 
@@ -175,7 +181,7 @@ Finally, let's plot two time series figures to compare the data.
 
 ```r
 library("lattice")
-xyplot(meansteps ~ interval | daytype, data = activity.NArep2, type = "l")
+xyplot(meansteps ~ interval | daytype, data = activity.NArep2, type = "l",layout = c(1, 2))
 ```
 
 ![plot of chunk weekdaysplot](figure/weekdaysplot.png) 

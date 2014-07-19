@@ -3,6 +3,11 @@ output:
   html_document:
     keep_md: yes
 ---
+
+```{r knitr_options}
+options(scipen=5) # for setting the threshold of displaying number with scientific notation
+```
+
 # Reproducible Research: Peer Assessment 1
 Janne Simonen  
 
@@ -83,7 +88,7 @@ Let's calculate the total number of missing values in the dataset (i.e. the tota
 missingValues <- nrow(activity) - sum(complete.cases(activity))
 ```
 
-Of the {r nrow(activity)} rows of data thera are **{r missingValues} rows with missing data**.  
+Of the `r nrow(activity)` rows of data thera are **`r missingValues` rows with missing data**.  
 
 To make the analysis a bit more accurate, we have to replace the missing values with a sensible value.
 Let's use the mean number of steps for a given time interval as a replacement for all NAs recorder for that day.
@@ -150,7 +155,9 @@ Finally, let's plot two time series figures to compare the data.
 
 ```{r weekdaysplot}
 library("lattice")
-xyplot(meansteps ~ interval | daytype, data = activity.NArep2, type = "l")
+xyplot(meansteps ~ interval | daytype, data = activity.NArep2, type = "l",layout = c(1, 2),
+       ylab = "Average steps", xlab = "Interval", 
+       main = "Average daily activity")
 ```
 
 We can see significant differences in the recorded average activity for weekdays and weekends, but a more
