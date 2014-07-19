@@ -47,7 +47,7 @@ meansteps <- mean(stepsperday$steps)
 mediansteps <- median(stepsperday$steps)
 ```
 
-The mean steps per day is `r round(meansteps)` and median `r round(mediansteps)`. 
+**The mean of the number of steps per day is `r round(meansteps)` and median `r round(mediansteps)`**. 
 Let's plot a histogram.
 
 ```{r stepsogram,fig.height=4}
@@ -67,8 +67,8 @@ maxavestepsIndex <- which.max(stepsperint$averageSteps)
 maxinterval <- activity$interval[maxavestepsIndex]
 ```
 
-The maximum number of steps, on average, is `r round(maxavesteps)` 
-which happens in time interval `r round(maxinterval)`. This can be seen from the following
+**The maximum number of steps, on average, is `r round(maxavesteps)` 
+which happens in time interval `r round(maxinterval)`**. This can be seen from the following
 time series plot
 
 ```{r dailyactivityplot,fig.height=4}
@@ -91,7 +91,7 @@ missingValues <- nrow(activity) - sum(complete.cases(activity))
 Of the `r nrow(activity)` rows of data thera are **`r missingValues` rows with missing data**.  
 
 To make the analysis a bit more accurate, we have to replace the missing values with a sensible value.
-Let's use the mean number of steps for a given time interval as a replacement for all NAs recorder for that day.
+**Let's use the mean number of steps for a given time interval as a replacement for all NAs recorder for that day.**
 
 ```{r replaceNAs}
 # calculate the mean number of steps for each interval

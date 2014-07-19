@@ -50,7 +50,7 @@ meansteps <- mean(stepsperday$steps)
 mediansteps <- median(stepsperday$steps)
 ```
 
-The mean steps per day is 9354 and median 10395. 
+**The mean of the number of steps per day is 9354 and median 10395**. 
 Let's plot a histogram.
 
 
@@ -74,8 +74,8 @@ maxavestepsIndex <- which.max(stepsperint$averageSteps)
 maxinterval <- activity$interval[maxavestepsIndex]
 ```
 
-The maximum number of steps, on average, is 206 
-which happens in time interval 835. This can be seen from the following
+**The maximum number of steps, on average, is 206 
+which happens in time interval 835**. This can be seen from the following
 time series plot
 
 
@@ -102,7 +102,7 @@ missingValues <- nrow(activity) - sum(complete.cases(activity))
 Of the 17568 rows of data thera are **2304 rows with missing data**.  
 
 To make the analysis a bit more accurate, we have to replace the missing values with a sensible value.
-Let's use the mean number of steps for a given time interval as a replacement for all NAs recorder for that day.
+**Let's use the mean number of steps for a given time interval as a replacement for all NAs recorder for that day.**
 
 
 ```r
@@ -181,7 +181,9 @@ Finally, let's plot two time series figures to compare the data.
 
 ```r
 library("lattice")
-xyplot(meansteps ~ interval | daytype, data = activity.NArep2, type = "l",layout = c(1, 2))
+xyplot(meansteps ~ interval | daytype, data = activity.NArep2, type = "l",layout = c(1, 2),
+       ylab = "Average steps", xlab = "Interval", 
+       main = "Average daily activity")
 ```
 
 ![plot of chunk weekdaysplot](figure/weekdaysplot.png) 
