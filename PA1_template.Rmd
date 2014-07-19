@@ -112,12 +112,30 @@ meansteps.NArep <- mean(stepsperday.NArep$steps)
 mediansteps.NArep <- median(stepsperday.NArep$steps)
 ```
 
-The mean steps per day for the data with NAs replace (values for original data in parenthesis) is `r round(meansteps.NArep)` (`r round(meansteps)`) and median `r round(mediansteps.NArep)` (`r round(mediansteps`).  
+The mean steps per day for the data with NAs replace (values for original data in parenthesis) is 
+`r round(meansteps.NArep)` (`r round(meansteps)`) and median 
+`r round(mediansteps.NArep)` (`r round(mediansteps)`).  
 
 Let's plot a histogram.
 
-```{r stepsogram.NAr,fig.height=4}
-hist(stepsperday.NAr$steps,breaks=20,xlab="Steps per day",main="Histogram of steps per day, NAs replaced")
+```{r stepsogram.NArep,fig.height=4}
+hist(stepsperday.NArep$steps,breaks=20,xlab="Steps per day",main="Histogram of steps per day, NAs replaced")
+```
 
+Comparing this with the histogram for the original data presented above, we see that the difference comes from the large number of days with no reported steps in the original data. Replacing the NAs with the mean number of steps for the given interval has therefore increased both the mean and median number of steps.
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+It is instructive to compare the activity patterns between weekdays and weekends. First, let's 
+make a factor variable that tells which category a given date in the data belongs to.
+
+```{r weekdays}
+# make sure we are using an english locale, or else the names of days will be different
+Sys.setlocale("LC_TIME", "English")
+# initialize the variable for holding the type of the day with 'weekday'
+daytype <- rep('weekday',nrow(activity))
+# replace the day type of Saturdays and Sundays to 'weekend' 
+daytype[weekdays(activity$date) %in% c('Saturday','Sunday')] <- 'weekend'
+activity.NArep <- cbind(activity.NArep,daytype)
+activity.NArep$daytype <- as.factor(activity.NArep$daytype)
+```

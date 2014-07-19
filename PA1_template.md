@@ -28,7 +28,7 @@ strings into date format. The following code takes care of all of that.
 
 ```r
 unzip("activity.zip")
-activity <- read.csv("activity.csv",stringsAsFactors=FALSE)
+activity <- read.csv("activity.csv",stringsAsFactors=FALSE,na.strings="NA")
 activity$date <- as.Date(activity$date, "%Y-%m-%d")
 ```
 
@@ -83,6 +83,58 @@ with(stepsperint,plot(interval,averageSteps,type="l",xlab="Interval",
 
 ## Imputing missing values
 
+Note that there are a number of days/intervals where there are missing values. The presence of missing days may introduce bias into some calculations or summaries of the data.  
 
+Let's calculate the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+
+
+```r
+# rows with NAs = total number of rows - number of rows without missing data
+missingValues <- nrow(activity) - sum(complete.cases(activity))
+```
+
+Of the {r nrow(activity)} rows of data thera are **{r missingValues} rows with missing data**.  
+
+To make the analysis a bit more accurate, we have to replace the missing values with a sensible value.
+Let's use the mean number of steps for a given time interval as a replacement for all NAs recorder for that day.
+
+
+```r
+# calculate the mean number of steps for each interval
+library(plyr) 
+meanstepsperint <- ddply(activity, .(interval),summarize,meansteps = mean(steps, na.rm=TRUE))
+# number of steps is an integer so let's round
+meanstepsperint$meansteps <- round(meanstepsperint$meansteps)
+# repeat the matrix to be the same size as the activity matrix, i.e. for all days
+# the trick is from StackExchange
+meanstepsfull <- do.call("rbind", rep(list(meanstepsperint), nrow(activity)/nrow(meanstepsperint)))
+# replace the NAs in activity with the means for each interval
+NAs <- !complete.cases(activity)
+activity.NArep <- activity
+activity.NArep$steps[NAs] <- meanstepsfull$meansteps[NAs]
+```
+
+Now that we have the data with NAs replaced, we can compare that with the original data.
+
+
+```r
+library(plyr) 
+stepsperday.NArep <- ddply(activity.NArep, .(date),summarize,steps = sum(steps, na.rm=TRUE))
+meansteps.NArep <- mean(stepsperday.NArep$steps)
+mediansteps.NArep <- median(stepsperday.NArep$steps)
+```
+
+The mean steps per day for the data with NAs replace (values for original data in parenthesis) is 
+1.0766 &times; 10<sup>4</sup> (9354) and median 
+1.0762 &times; 10<sup>4</sup> (1.0395 &times; 10<sup>4</sup>).  
+
+Let's plot a histogram.
+
+
+```r
+hist(stepsperday.NArep$steps,breaks=20,xlab="Steps per day",main="Histogram of steps per day, NAs replaced")
+```
+
+![plot of chunk stepsogram.NArep](figure/stepsogram.NArep.png) 
 
 ## Are there differences in activity patterns between weekdays and weekends?
